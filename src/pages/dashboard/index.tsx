@@ -17,7 +17,10 @@ export default function Dashboard() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {availableLessons.map((form) => (
             <div key={form.id} className='space-y-2'>
-              <h3 className="font-semibold text-lg mb-2">Aula {form.id} | <span>{form.title}</span></h3>
+              <h3 className="font-semibold text-lg mb-2">
+                <span className='text-bold text-xl'>Aula {form.id}</span>
+                <span className="text-gray-600"> | {form.title}</span>
+              </h3>
               <Link
                 to={`/form/${form.id}`}
                 className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition flex justify-between"

@@ -7,7 +7,7 @@ export default function Header() {
         <Link to="/dashboard" className="text-xl font-bold">
           Escola da Bíblia
         </Link>
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           <Link to="/dashboard" className="hover:text-gray-300">
             Aulas
           </Link>
