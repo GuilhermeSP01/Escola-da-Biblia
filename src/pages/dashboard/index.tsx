@@ -22,7 +22,7 @@ export default function Dashboard() {
                 <span className="text-gray-600"> | {form.title}</span>
               </h3>
               <Link
-                to={`/form/${form.id}`}
+                to={`https://www.youtube.com/`}
                 className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition flex justify-between"
               >
                 <p className="text-gray-600 flex text-lg">
