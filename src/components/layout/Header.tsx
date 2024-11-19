@@ -38,7 +38,7 @@ export default function Header() {
           <Link to={`${
               isAdmin ? '/admin' : '/dashboard'
             }`} className="hover:text-yellow-400 transition-colors duration-300 font-medium">
-            {isAdmin ? 'Admin' : 'Dashboard'}
+            {isAdmin ? 'Painel' : 'Aulas'}
           </Link>
           <Link to="/profile" className="hover:text-yellow-400 transition-colors duration-300 font-medium">
             Perfil
@@ -83,7 +83,7 @@ export default function Header() {
                   className="block px-6 py-3 text-base text-white hover:bg-gray-700 hover:text-yellow-400 transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
-                  {isAdmin ? 'Admin' : 'Dashboard'}
+                  {isAdmin ? 'Painel' : 'Aulas'}
                 </Link>
                 <Link
                   to="/profile"
