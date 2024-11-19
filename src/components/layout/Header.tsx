@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const { isAdmin } = useAuth()
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -20,7 +22,9 @@ export default function Header() {
     <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-4 shadow-lg">
       <nav className="container mx-auto flex justify-between items-center px-6">
         <Link 
-          to="/dashboard" 
+          to={`${
+            isAdmin ? '/admin' : '/dashboard'
+          }`} 
           className="text-2xl font-bold flex items-center gap-2 transition-colors duration-300"
         >
           <span>Escola da Bíblia</span>
@@ -31,8 +35,10 @@ export default function Header() {
           <Link to="https://wa.me/5513996013905" className="hover:text-yellow-400 transition-colors duration-300 font-medium">
             Fale conosco
           </Link>
-          <Link to="/dashboard" className="hover:text-yellow-400 transition-colors duration-300 font-medium">
-            Aulas
+          <Link to={`${
+              isAdmin ? '/admin' : '/dashboard'
+            }`} className="hover:text-yellow-400 transition-colors duration-300 font-medium">
+            {isAdmin ? 'Admin' : 'Dashboard'}
           </Link>
           <Link to="/profile" className="hover:text-yellow-400 transition-colors duration-300 font-medium">
             Perfil
@@ -71,11 +77,13 @@ export default function Header() {
                   Fale conosco
                 </Link>
                 <Link
-                  to="/dashboard"
+                  to={`${
+                    isAdmin ? '/admin' : '/dashboard'
+                  }`}
                   className="block px-6 py-3 text-base text-white hover:bg-gray-700 hover:text-yellow-400 transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
-                  Aulas
+                  {isAdmin ? 'Admin' : 'Dashboard'}
                 </Link>
                 <Link
                   to="/profile"
