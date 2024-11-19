@@ -9,7 +9,11 @@ export default function AdminLayout() {
     return <div>Carregando...</div>
   }
 
-  if (!user || !isAdmin) {
+  if (!user) {
+    return <Navigate to="/" />
+  }
+
+  if (!isAdmin) {
     return <Navigate to="/dashboard" />
   }
 
