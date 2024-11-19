@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 interface AuthContextType {
   user: User | null
   loading: boolean
+  isAdmin: boolean
   signInWithGoogle: () => Promise<void>
   logout: () => Promise<void>
   updateUserProfile: (displayName: string) => Promise<void>
@@ -22,11 +23,19 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user)
+      user?.getIdTokenResult().then((tokenResult) => {
+        if (tokenResult.claims.admin) {
+          setIsAdmin(true)
+        } else {
+          setIsAdmin(false)
+        }
+      })
       setLoading(false)
     })
 
@@ -36,8 +45,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider()
-      await signInWithPopup(auth, provider)
-      navigate('/dashboard')
+      const result = await signInWithPopup(auth, provider)
+      const tokenResult = await result.user.getIdTokenResult()
+      
+      if (tokenResult.claims.admin) {
+        navigate('/admin')
+      } else {
+        navigate('/dashboard')
+      }
     } catch (error) {
       console.error('Erro ao fazer login:', error)
     }
@@ -66,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout, updateUserProfile }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, logout, updateUserProfile }}>
       {children}
     </AuthContext.Provider>
   )

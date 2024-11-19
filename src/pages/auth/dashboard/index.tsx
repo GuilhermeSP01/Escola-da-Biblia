@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import videoIcon from '../../assets/icons/videoIcon.png'
-import materialIcon from '../../assets/icons/materialIcon.png'
-import formIcon from '../../assets/icons/formIcon.png'
+import videoIcon from '../../../assets/icons/videoIcon.png'
+import materialIcon from '../../../assets/icons/materialIcon.png'
+import formIcon from '../../../assets/icons/formIcon.png'
 
 export default function Dashboard() {
   const availableLessons = [

@@ -1,10 +1,10 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export default function Profile() {
-  const { logout, user, updateUserProfile } = useAuth();
+  const { logout, user, isAdmin, updateUserProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(user?.displayName || '');
   const [error, setError] = useState('');
@@ -126,6 +126,15 @@ export default function Profile() {
           <p className="text-gray-600">Em breve você poderá acompanhar seu progresso aqui.</p>
         </div>
       </section>
+
+      {isAdmin && (
+        <section className="space-y-4">
+          <h1 className="text-2xl font-semibold">Administração</h1>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="text-gray-600">Painel de administração.</p>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
