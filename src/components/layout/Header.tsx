@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useDatabase } from '../../contexts/DatabaseContext'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const { isAdmin } = useAuth()
+
+  const { getAulas } = useDatabase()
+  useEffect(() => {
+    getAulas()
+  }, [])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

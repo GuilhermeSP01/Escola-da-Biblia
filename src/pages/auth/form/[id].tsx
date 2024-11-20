@@ -1,7 +1,10 @@
 import { useParams } from 'react-router-dom'
+import { useDatabase } from '../../../contexts/DatabaseContext'
 
 export default function Form() {
   const { id } = useParams()
+
+  const { aulas } = useDatabase()
 
   // Exemplo de questionário (posteriormente virá do banco de dados)
   const quiz = {
@@ -28,18 +31,18 @@ export default function Form() {
       </header>
 
       <form className="space-y-6">
-        {quiz.questions.map((question) => (
-          <div key={question.id} className="bg-white p-6 rounded-lg shadow space-y-4">
-            <p className="font-semibold">{question.id}. {question.question}</p>
+        {aulas[Number(id)-1].questoes.map((questao: any, index: number) => (
+          <div key={index} className="bg-white p-6 rounded-lg shadow space-y-4">
+            <p className="font-semibold">{index + 1}. {questao.pergunta}</p>
             <div className="space-y-2">
-              {question.options.map((option, index) => (
+              {questao.alternativas.map((text: string, index: number) => (
                 <label key={index} className="flex items-center space-x-3">
                   <input
                     type="radio"
-                    name={`question-${question.id}`}
+                    name={`question-${questao.numero}`}
                     className="form-radio"
                   />
-                  <span>{option}</span>
+                  <span>{text}</span>
                 </label>
               ))}
             </div>
