@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
 import { useNavigate } from 'react-router-dom'
+import { useDatabase } from './DatabaseContext'
 
 interface AuthContextType {
   user: User | null
@@ -21,6 +22,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const { checkAndRegisterNewUser } = useDatabase()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -51,6 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (tokenResult.claims.admin) {
         navigate('/admin')
       } else {
+        await checkAndRegisterNewUser(result.user.uid)
         navigate('/dashboard')
       }
     } catch (error) {
@@ -72,7 +75,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await updateProfile(user, { displayName })
-      // Força a atualização do estado para refletir as mudanças
       setUser({ ...user, displayName })
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error)

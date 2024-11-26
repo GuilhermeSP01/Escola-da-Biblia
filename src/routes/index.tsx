@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
           {
             path: '/admin/turmas/:id/aula/:aulaId',
             element: <AulaQuestoes />,
-          }
+          },
         ],
       },
     ],

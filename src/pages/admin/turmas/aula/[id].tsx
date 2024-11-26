@@ -2,25 +2,54 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDatabase } from "../../../../contexts/DatabaseContext"
 import type { Questao } from "../../../../contexts/DatabaseContext"
+import { db } from '../../../../firebase/firebase'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 
 export default function AulaQuestoes() {
     const { aulaId } = useParams()
     const navigate = useNavigate()
-    const { aulas, updateQuestoes } = useDatabase()
+    const { aulas, updateQuestoes, updateRespostasCorretas } = useDatabase()
     const aula = aulas.find(a => a.id === aulaId)
     const [questoes, setQuestoes] = useState<Questao[]>([])
     const [editingIndex, setEditingIndex] = useState<number | null>(null)
+    const [respostasCorretas, setRespostasCorretas] = useState<{ [key: number]: string }>({})
 
     useEffect(() => {
         if (aula) {
             setQuestoes(aula.questoes || [])
+            // Carregar respostas corretas
+            const carregarRespostas = async () => {
+                try {
+                    const respostasRef = collection(db, 'respostas')
+                    const q = query(respostasRef, where('aulaId', '==', aulaId))
+                    const querySnapshot = await getDocs(q)
+                    
+                    if (!querySnapshot.empty) {
+                        const respostasDoc = querySnapshot.docs[0].data()
+                        const respostasMap: { [key: number]: string } = {}
+                        respostasDoc.questoes.forEach((q: { numero: number, resposta: string }) => {
+                            respostasMap[q.numero] = q.resposta
+                        })
+                        setRespostasCorretas(respostasMap)
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar respostas:', error)
+                }
+            }
+            carregarRespostas()
         }
-    }, [aula])
+    }, [aula, aulaId])
 
     const handleSave = async () => {
         if (!aula) return
         try {
             await updateQuestoes(aula.id, questoes)
+            // Salvar respostas corretas
+            const respostasArray = Object.entries(respostasCorretas).map(([numero, resposta]) => ({
+                numero: parseInt(numero),
+                resposta
+            }))
+            await updateRespostasCorretas(aula.id, respostasArray)
             setEditingIndex(null)
         } catch (error) {
             console.error('Error saving questions:', error)
@@ -154,6 +183,18 @@ export default function AulaQuestoes() {
                                 <div className="space-y-2">
                                     {questao.alternativas.map((alternativa: string, alternativaIndex: number) => (
                                         <div key={alternativaIndex} className="flex items-center space-x-2">
+                                            <input
+                                                type="radio"
+                                                name={`resposta-correta-${questaoIndex}`}
+                                                checked={respostasCorretas[questaoIndex + 1] === getLetraAlternativa(alternativaIndex)}
+                                                onChange={() => {
+                                                    setRespostasCorretas({
+                                                        ...respostasCorretas,
+                                                        [questaoIndex + 1]: getLetraAlternativa(alternativaIndex)
+                                                    })
+                                                }}
+                                                className="text-blue-600 focus:ring-blue-500"
+                                            />
                                             <span className="text-gray-500 w-6">
                                                 {getLetraAlternativa(alternativaIndex)}
                                             </span>
@@ -176,8 +217,11 @@ export default function AulaQuestoes() {
                             ) : (
                                 <div className="space-y-2 pl-4">
                                     {questao.alternativas.map((alternativa: string, alternativaIndex: number) => (
-                                        <div key={alternativaIndex} className="text-gray-600">
-                                            {getLetraAlternativa(alternativaIndex) + '.'} {alternativa}
+                                        <div key={alternativaIndex} className={`text-gray-600 flex items-center space-x-2`}>
+                                            {respostasCorretas[questaoIndex + 1] === getLetraAlternativa(alternativaIndex) && (
+                                                <span className="text-green-500">✓</span>
+                                            )}
+                                            <span>{getLetraAlternativa(alternativaIndex) + '.'} {alternativa}</span>
                                         </div>
                                     ))}
                                 </div>

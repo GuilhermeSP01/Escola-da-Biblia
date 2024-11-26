@@ -4,10 +4,10 @@ import { DatabaseProvider } from '../contexts/DatabaseContext'
 
 export function Root() {
   return (
-    <AuthProvider>
-      <DatabaseProvider>
+    <DatabaseProvider>
+      <AuthProvider>
         <Outlet />
-      </DatabaseProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </DatabaseProvider>
   )
 }

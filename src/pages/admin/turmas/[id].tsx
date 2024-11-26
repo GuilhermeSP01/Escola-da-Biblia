@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useDatabase } from "../../../contexts/DatabaseContext"
 import { format } from "date-fns"
@@ -7,8 +7,15 @@ import { ptBR } from "date-fns/locale"
 export default function TurmaDetails() {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { turmas, getAulas, aulas } = useDatabase()
+    const { turmas, getAulas, aulas, createAula } = useDatabase()
     const turma = turmas.find(t => t.id === id)
+    const [isCreating, setIsCreating] = useState(false)
+    const [newAula, setNewAula] = useState({
+        numero: '',
+        titulo: '',
+        dataAbertura: '',
+        dataLimite: ''
+    })
 
     useEffect(() => {
         if (turma?.nome) {
@@ -60,7 +67,110 @@ export default function TurmaDetails() {
             </header>
 
             <section>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Aulas</h2>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-semibold text-gray-800">Aulas</h2>
+                    <button
+                        onClick={() => setIsCreating(true)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Nova Aula
+                    </button>
+                </div>
+
+                {isCreating && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                            <h3 className="text-xl font-semibold mb-4">Nova Aula</h3>
+                            <form onSubmit={async (e) => {
+                                e.preventDefault()
+                                try {
+                                    await createAula(
+                                        turma.nome,
+                                        Number(newAula.numero),
+                                        newAula.titulo,
+                                        newAula.dataAbertura,
+                                        newAula.dataLimite
+                                    )
+                                    setIsCreating(false)
+                                    setNewAula({
+                                        numero: '',
+                                        titulo: '',
+                                        dataAbertura: '',
+                                        dataLimite: ''
+                                    })
+                                } catch (error) {
+                                    console.error('Erro ao criar aula:', error)
+                                    alert('Erro ao criar aula. Por favor, tente novamente.')
+                                }
+                            }} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Número da Aula
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={newAula.numero}
+                                        onChange={(e) => setNewAula(prev => ({ ...prev, numero: e.target.value }))}
+                                        className="w-full p-2 border rounded-lg"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Título
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={newAula.titulo}
+                                        onChange={(e) => setNewAula(prev => ({ ...prev, titulo: e.target.value }))}
+                                        className="w-full p-2 border rounded-lg"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Data de Abertura
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        value={newAula.dataAbertura}
+                                        onChange={(e) => setNewAula(prev => ({ ...prev, dataAbertura: e.target.value }))}
+                                        className="w-full p-2 border rounded-lg"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Data Limite
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        value={newAula.dataLimite}
+                                        onChange={(e) => setNewAula(prev => ({ ...prev, dataLimite: e.target.value }))}
+                                        className="w-full p-2 border rounded-lg"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex justify-end space-x-2 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCreating(false)}
+                                        className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                                    >
+                                        Criar Aula
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {aulas.map((aula) => (
                         <div
