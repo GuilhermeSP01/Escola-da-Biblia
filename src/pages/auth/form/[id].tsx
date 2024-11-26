@@ -3,35 +3,21 @@ import { useDatabase } from '../../../contexts/DatabaseContext'
 
 export default function Form() {
   const { id } = useParams()
-
   const { aulas } = useDatabase()
-
-  // Exemplo de questionário (posteriormente virá do banco de dados)
-  const quiz = {
-    title: 'Introdução',
-    questions: [
-      {
-        id: 1,
-        question: 'Qual é o primeiro livro da Bíblia?',
-        options: ['Gênesis', 'Êxodo', 'Levítico', 'Números', 'Deuteronomio'],
-      },
-      {
-        id: 2,
-        question: 'Quem escreveu os primeiros cinco livros da Bíblia?',
-        options: ['Moisés', 'Davi', 'Salomão', 'Abraão', 'Adão'],
-      },
-    ],
+  
+  const getLetraAlternativa = (index: number) => {
+    return String.fromCharCode(97 + index) // 97 é o código ASCII para 'a'
   }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold">{quiz.title}</h1>
+        <h1 className="text-3xl font-bold">{aulas.find(a => a.numero === Number(id))?.titulo}</h1>
         <p className="text-gray-600">Questionário #{id}</p>
       </header>
 
       <form className="space-y-6">
-        {aulas[Number(id)-1].questoes.map((questao: any, index: number) => (
+        {aulas.find(a => a.numero === Number(id))?.questoes.map((questao: any, index: number) => (
           <div key={index} className="bg-white p-6 rounded-lg shadow space-y-4">
             <p className="font-semibold">{index + 1}. {questao.pergunta}</p>
             <div className="space-y-2">
@@ -39,22 +25,26 @@ export default function Form() {
                 <label key={index} className="flex items-center space-x-3">
                   <input
                     type="radio"
-                    name={`question-${questao.numero}`}
-                    className="form-radio"
+                    name={`questao-${index}`}
+                    className="text-blue-600 focus:ring-blue-500 h-4 w-4"
                   />
-                  <span>{text}</span>
+                  <span className="text-gray-700">
+                    {getLetraAlternativa(index) + ')'} {text}
+                  </span>
                 </label>
               ))}
             </div>
           </div>
         ))}
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-        >
-          Enviar Respostas
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Enviar Respostas
+          </button>
+        </div>
       </form>
     </div>
   )

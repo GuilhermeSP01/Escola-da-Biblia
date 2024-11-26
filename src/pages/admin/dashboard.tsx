@@ -6,29 +6,29 @@ export default function Admin() {
 
   const adminSections = [
     {
-      id: 'users',
+      id: 'usuarios',
       title: 'Gerenciar Usuários',
       description: 'Visualize e gerencie os usuários do sistema',
       path: '/admin/users'
     },
     {
-      id: 'lessons',
-      title: 'Gerenciar Aulas',
-      description: 'Crie, edite e organize as aulas do curso',
-      path: '/admin/lessons'
+      id: 'turmas',
+      title: 'Gerenciar Turmas',
+      description: 'Crie, edite e organize as turmas do curso',
+      path: '/admin/turmas'
     },
-    {
-      id: 'forms',
-      title: 'Gerenciar Questionários',
-      description: 'Crie e edite questionários para as aulas',
-      path: '/admin/forms'
-    },
-    {
-      id: 'reports',
-      title: 'Relatórios',
-      description: 'Visualize relatórios e estatísticas do sistema',
-      path: '/admin/reports'
-    }
+    // {
+    //   id: 'forms',
+    //   title: 'Gerenciar Questionários',
+    //   description: 'Crie e edite questionários para as aulas',
+    //   path: '/admin/forms'
+    // },
+    // {
+    //   id: 'reports',
+    //   title: 'Relatórios',
+    //   description: 'Visualize relatórios e estatísticas do sistema',
+    //   path: '/admin/reports'
+    // }
   ]
 
   return (

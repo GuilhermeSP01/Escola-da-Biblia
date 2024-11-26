@@ -7,6 +7,10 @@ import AuthLayout from '../components/layout/AuthLayout'
 import AdminLayout from '../components/layout/AdminLayout'
 import { Root } from '../components/Root'
 import Admin from '../pages/admin/dashboard'
+import Turmas from '../pages/admin/turmas'
+import Users from '../pages/admin/users'
+import TurmaDetails from '../pages/admin/turmas/[id]'
+import AulaQuestoes from '../pages/admin/turmas/aula/[id]'
 
 export const router = createBrowserRouter([
   {
@@ -40,14 +44,22 @@ export const router = createBrowserRouter([
             path: '/admin',
             element: <Admin />,
           },
-          // {
-          //   path: '/admin/users',
-          //   element: <AdminUsers />,
-          // },
-          // {
-          //   path: '/admin/lessons',
-          //   element: <AdminLessons />,
-          // },
+          {
+            path: '/admin/users',
+            element: <Users />,
+          },
+          {
+            path: '/admin/turmas',
+            element: <Turmas />,
+          },
+          {
+            path: '/admin/turmas/:id',
+            element: <TurmaDetails />,
+          },
+          {
+            path: '/admin/turmas/:id/aula/:aulaId',
+            element: <AulaQuestoes />,
+          }
         ],
       },
     ],

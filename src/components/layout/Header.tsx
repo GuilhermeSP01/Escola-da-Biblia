@@ -8,10 +8,12 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null)
   const { isAdmin } = useAuth()
 
-  const { getAulas } = useDatabase()
-  useEffect(() => {
-    getAulas()
-  }, [])
+  if (!isAdmin) {
+    const { getAulas } = useDatabase()
+    useEffect(() => {
+      getAulas('2024-B')
+    }, [])
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
