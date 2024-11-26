@@ -11,6 +11,7 @@ import Turmas from '../pages/admin/turmas'
 import Users from '../pages/admin/users'
 import TurmaDetails from '../pages/admin/turmas/[id]'
 import AulaQuestoes from '../pages/admin/turmas/aula/[id]'
+import UserDetails from '../pages/admin/users/[id]'
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
           {
             path: '/admin/users',
             element: <Users />,
+          },
+          {
+            path: '/admin/users/:id',
+            element: <UserDetails />,
           },
           {
             path: '/admin/turmas',
