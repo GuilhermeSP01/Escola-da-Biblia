@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useDatabase } from '../../../contexts/DatabaseContext'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '../../../firebase/firebase'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 interface Envio {
   aulaId: string
@@ -24,6 +26,12 @@ export default function Form() {
   const [envioAtual, setEnvioAtual] = useState<Envio | null>(null)
   const [respostasCorretas, setRespostasCorretas] = useState<{ [key: number]: string }>({})
   const aula = aulas.find(a => a.numero === Number(id))
+
+  const formatFirebaseDate = (timestamp: any) => {
+    if (!timestamp) return ''
+    const date = new Date(timestamp.seconds * 1000)
+    return format(date, "dd/MM/yyyy", { locale: ptBR })
+  }
   
   useEffect(() => {
     if (aula) {
@@ -135,6 +143,16 @@ export default function Form() {
           Carregando...
         </div>
       </div>
+    )
+  }
+
+  if (!jaEnviado && aula?.dataLimite.seconds * 1000 < new Date().valueOf()) {
+    return (
+        <div className="max-w-2xl mx-auto p-4">
+          <div className="text-center text-gray-600">
+            O questionário expirou.
+          </div>
+        </div>
     )
   }
 

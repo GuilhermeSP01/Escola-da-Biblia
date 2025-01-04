@@ -35,9 +35,9 @@ export default function Admin() {
     <div className="space-y-8 p-6">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Painel Administrativo</h1>
-        <p className="text-gray-600 mt-2">
+        {/* <p className="text-gray-600 mt-2">
           Bem-vindo(a), {user?.displayName}
-        </p>
+        </p> */}
       </header>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
@@ -57,14 +57,14 @@ export default function Admin() {
         ))}
       </div>
 
-      <section className="mt-8">
+      {/* <section className="mt-8">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Atividade Recente</h2>
         <div className="bg-white rounded-lg shadow p-6">
           <p className="text-gray-600">
             Nenhuma atividade recente para mostrar.
           </p>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

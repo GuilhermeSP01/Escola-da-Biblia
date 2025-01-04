@@ -58,12 +58,12 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <section className="space-y-4">
+      {/* <section className="space-y-4">
         <h1 className="text-2xl font-semibold">Seu Progresso</h1>
         <div className="bg-white p-6 rounded-lg shadow">
           <p className="text-gray-600">Em breve você poderá acompanhar seu progresso aqui.</p>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

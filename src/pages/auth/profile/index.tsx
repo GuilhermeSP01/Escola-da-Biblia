@@ -77,10 +77,10 @@ export default function Profile() {
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <p className="text-gray-600">Email: {user?.email}</p>
-        <p className="text-gray-600">Turma: </p>
-        <p className="text-gray-600">Data da inscrição: {formatDate(user?.metadata.creationTime)}</p>
+        {/* <p className="text-gray-600">Turma: </p> */}
+        {!isAdmin && <p className="text-gray-600">Data da inscrição: {formatDate(user?.metadata.creationTime)}</p>}
         <div className="flex justify-end space-x-4 mt-6">
-          <button 
+          {/* <button 
             className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
           >
             <svg 
@@ -97,7 +97,7 @@ export default function Profile() {
               />
             </svg>
             Baixar certificado
-          </button>
+          </button> */}
           <button 
             onClick={logout}
             className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
@@ -120,21 +120,21 @@ export default function Profile() {
         </div>
       </section>
 
-      <section className="space-y-4">
+      {/* <section className="space-y-4">
         <h1 className="text-2xl font-semibold">Seu Progresso</h1>
         <div className="bg-white p-6 rounded-lg shadow">
           <p className="text-gray-600">Em breve você poderá acompanhar seu progresso aqui.</p>
         </div>
-      </section>
+      </section> */}
 
-      {isAdmin && (
+      {/* {isAdmin && (
         <section className="space-y-4">
           <h1 className="text-2xl font-semibold">Administração</h1>
           <div className="bg-white p-6 rounded-lg shadow">
             <p className="text-gray-600">Painel de administração.</p>
           </div>
         </section>
-      )}
+      )} */}
     </div>
   );
 }
