@@ -26,7 +26,12 @@ interface DatabaseProviderProps {
   children: ReactNode
 }
 
-interface Questao {
+interface dataL {
+  seconds: number
+  nanoseconds: number
+}
+
+export interface Questao {
   pergunta: string
   alternativas: string[]
 }
@@ -38,7 +43,7 @@ interface Aula {
   turma: string
   questoes: Questao[]
   dataAbertura: string
-  dataLimite: string
+  dataLimite: dataL
   videoAula: string
   material: string
 }
