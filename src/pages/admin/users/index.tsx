@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '../../../firebase/firebase'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -26,33 +26,37 @@ export default function Users() {
     const [cadastros, setCadastros] = useState<Cadastro[]>([])
     const [loading, setLoading] = useState(true)
     const { turmas, getTurmas } = useDatabase()
+    const [selectedTurma, setSelectedTurma] = useState<string | null>(null)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await getTurmas()
-                const cadastrosRef = collection(db, 'cadastros')
-                const querySnapshot = await getDocs(cadastrosRef)
-                const cadastrosData: Cadastro[] = []
+    const fetchData = async () => {
+        try {
+            await getTurmas()
+            const cadastrosRef = collection(db, 'cadastros')
+            const q = selectedTurma
+                ? query(cadastrosRef, where('turmaId', '==', selectedTurma))
+                : cadastrosRef
+            const querySnapshot = await getDocs(q)
+            const cadastrosData: Cadastro[] = []
 
-                querySnapshot.forEach((doc) => {
-                    cadastrosData.push({
-                        id: doc.id,
-                        ...doc.data()
-                    } as Cadastro)
-                })
+            querySnapshot.forEach((doc) => {
+                cadastrosData.push({
+                    id: doc.id,
+                    ...doc.data()
+                } as Cadastro)
+            })
 
-                setCadastros(cadastrosData)
-            } catch (error) {
-                console.error('Erro ao buscar cadastros:', error)
-            } finally {
-                setLoading(false)
-            }
+            setCadastros(cadastrosData)
+        } catch (error) {
+            console.error('Erro ao buscar cadastros:', error)
+        } finally {
+            setLoading(false)
         }
+    }
 
+    useEffect(() => {
         fetchData()
-    }, [])
+    }, [selectedTurma])
 
     const getTurmaNome = (turmaId: string) => {
         const turma = turmas.find(t => t.id === turmaId)
@@ -86,6 +90,21 @@ export default function Users() {
             <header className="mb-8">
                 <h1 className="text-3xl font-bold">Gerenciar Usuários</h1>
                 <p className="text-gray-600 mt-2">Lista de todos os usuários cadastrados no sistema</p>
+                <div className="mt-4">
+                    <label className="text-gray-600 mr-2">Turma:</label>
+                    <select
+                        value={selectedTurma || ''}
+                        onChange={(e) => setSelectedTurma(e.target.value)}
+                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    >
+                        <option value="">Todas as turmas</option>
+                        {turmas.map(turma => (
+                            <option key={turma.id} value={turma.id}>
+                                {turma.nome}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </header>
 
             <div className="bg-white rounded-lg shadow overflow-hidden">
