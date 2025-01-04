@@ -10,7 +10,7 @@ interface DatabaseContextType {
   getTurmas: () => void
   createTurma: (nome: string, dataAbertura: string, dataFinal: string) => Promise<void>
   updateTurmaStatus: (turmaId: string, aberto: boolean) => Promise<void>
-  createAula: (turma: string, numero: number, titulo: string, dataAbertura: string, dataLimite: string) => Promise<void>
+  createAula: (turma: string, numero: number, titulo: string, dataAbertura: string, dataLimite: string, videoAula: string, material: string) => Promise<void>
   updateQuestoes: (aulaId: string, questoes: Questao[]) => Promise<void>
   registerUserInOpenClass: (userId: string) => Promise<void>
   submitQuestionario: (aulaId: string, respostas: { questao: number, resposta: string }[]) => Promise<void>
@@ -39,6 +39,8 @@ interface Aula {
   questoes: Questao[]
   dataAbertura: string
   dataLimite: string
+  videoAula: string
+  material: string
 }
 
 interface Turma {
@@ -128,13 +130,15 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
     }
   }
 
-  async function createAula(turma: string, numero: number, titulo: string, dataAbertura: string, dataLimite: string) {
+  async function createAula(turma: string, numero: number, titulo: string, dataAbertura: string, dataLimite: string, videoAula: string, material: string) {
     const aulasRef = collection(db, 'aulas')
     await addDoc(aulasRef, {
       turma,
       numero,
       titulo,
       questoes: [],
+      material,
+      videoAula,
       dataAbertura: Timestamp.fromDate(new Date(dataAbertura)),
       dataLimite: Timestamp.fromDate(new Date(dataLimite))
     })

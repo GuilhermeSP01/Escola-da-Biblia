@@ -14,7 +14,9 @@ export default function TurmaDetails() {
         numero: '',
         titulo: '',
         dataAbertura: '',
-        dataLimite: ''
+        dataLimite: '',
+        videoAula: '',
+        material: ''
     })
 
     useEffect(() => {
@@ -89,14 +91,18 @@ export default function TurmaDetails() {
                                         Number(newAula.numero),
                                         newAula.titulo,
                                         newAula.dataAbertura,
-                                        newAula.dataLimite
+                                        newAula.dataLimite,
+                                        newAula.videoAula,
+                                        newAula.material
                                     )
                                     setIsCreating(false)
                                     setNewAula({
                                         numero: '',
                                         titulo: '',
                                         dataAbertura: '',
-                                        dataLimite: ''
+                                        dataLimite: '',
+                                        videoAula: '',
+                                        material: ''
                                     })
                                 } catch (error) {
                                     console.error('Erro ao criar aula:', error)
@@ -123,6 +129,30 @@ export default function TurmaDetails() {
                                         type="text"
                                         value={newAula.titulo}
                                         onChange={(e) => setNewAula(prev => ({ ...prev, titulo: e.target.value }))}
+                                        className="w-full p-2 border rounded-lg"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Material
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={newAula.material}
+                                        onChange={(e) => setNewAula(prev => ({ ...prev, material: e.target.value }))}
+                                        className="w-full p-2 border rounded-lg"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Videoaula
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={newAula.videoAula}
+                                        onChange={(e) => setNewAula(prev => ({ ...prev, videoAula: e.target.value }))}
                                         className="w-full p-2 border rounded-lg"
                                         required
                                     />

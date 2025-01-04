@@ -27,7 +27,7 @@ export default function Dashboard() {
                 <span className="text-gray-600"> | {aula.titulo}</span>
               </h3>
               <Link
-                to={`https://www.youtube.com/`}
+                to={aula.videoAula}
                 className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition flex justify-between"
               >
                 <p className="text-gray-600 flex text-lg">
@@ -36,7 +36,7 @@ export default function Dashboard() {
                 <p className='text-gray-500'>{formatFirebaseDate(aula.dataAbertura)}</p>
               </Link>
               <Link
-                to={`/form/${aula.numero}`}
+                to={aula.material}
                 className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition flex justify-between"
               >
                 <p className="text-gray-600 flex text-lg">
