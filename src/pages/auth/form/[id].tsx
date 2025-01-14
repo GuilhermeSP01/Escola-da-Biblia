@@ -246,7 +246,7 @@ export default function Form() {
                                     : suaResposta && !questao.correta
                                     ? 'bg-red-50 border border-red-200'
                                     : respostaCorreta
-                                    ? 'bg-green-50 border border-green-200 opacity-50'
+                                    ? 'bg-gray-50 border border-gray-200' //'bg-green-50 border border-green-200 opacity-50'
                                     : 'bg-gray-50 border border-gray-200'
                                 }`}
                               >
@@ -254,7 +254,7 @@ export default function Form() {
                                   <span className="mr-2">{letra + ')'}</span>
                                   <span className="flex-1">{alternativa}</span>
                                   <div className="flex items-center space-x-2 ml-2">
-                                    {suaResposta && (
+                                    {/* {suaResposta && (
                                       <span className={`text-sm ${
                                         questao.correta 
                                           ? 'text-green-600'
@@ -267,7 +267,7 @@ export default function Form() {
                                       <span className="text-sm text-green-600">
                                         Resposta correta
                                       </span>
-                                    )}
+                                    )} */}
                                   </div>
                                 </div>
                               </div>
