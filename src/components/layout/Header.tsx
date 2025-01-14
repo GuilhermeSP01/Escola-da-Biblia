@@ -11,7 +11,8 @@ export default function Header() {
   if (!isAdmin) {
     const { getAulas } = useDatabase()
     useEffect(() => {
-      getAulas('2024-B')
+      console.log('test')
+      getAulas('2025-B')
     }, [])
   }
 
@@ -40,7 +41,7 @@ export default function Header() {
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex gap-8">
-          <Link to="https://wa.me/5513996013905" className="hover:text-yellow-400 transition-colors duration-300 font-medium">
+          <Link to="https://wa.me/5513988542892" className="hover:text-yellow-400 transition-colors duration-300 font-medium">
             Fale conosco
           </Link>
           <Link to={`${
@@ -78,7 +79,7 @@ export default function Header() {
             <div className="absolute right-0 mt-3 w-64 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
               <div className="py-2">
                 <Link
-                  to="https://wa.me/5513996013905"
+                  to="https://wa.me/5513988542892"
                   className="block px-6 py-3 text-base text-white hover:bg-gray-700 hover:text-yellow-400 transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
