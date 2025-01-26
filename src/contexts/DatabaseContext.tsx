@@ -6,10 +6,13 @@ import { auth } from '../firebase/firebase'
 interface DatabaseContextType {
   turmas: Turma[]
   aulas: Aula[]
+  cadastro: Cadastro
   getAulas: (turma: string) => void
   getTurmas: () => void
   createTurma: (nome: string, dataAbertura: string, dataFinal: string) => Promise<void>
   updateTurmaStatus: (turmaId: string, aberto: boolean) => Promise<void>
+  getCadastro: (userId: string) => Promise<Cadastro | undefined>
+  updateCadastro: (userId: string, telefone: string, endereco: Endereco) => Promise<void>
   createAula: (turma: string, numero: number, titulo: string, dataAbertura: string, dataLimite: string, videoAula: string, material: string) => Promise<void>
   updateQuestoes: (aulaId: string, questoes: Questao[]) => Promise<void>
   registerUserInOpenClass: (userId: string) => Promise<void>
@@ -56,9 +59,40 @@ interface Turma {
   dataFinal: Date
 }
 
+interface Cadastro {
+  alunoId: string
+  email: string
+  telefone: string
+  endereco: string
+  turmaId: string
+  envios: Envio[]
+}
+
+interface Envio {
+  aulaId: string
+  dataEnvio: string
+  questoes: {
+    questao: number
+    resposta: string
+    correta: boolean
+  }[]
+}
+
+interface Endereco {
+  tipoLogradouro: string
+  nomeLogradouro: string
+  numero: string
+  complemento: string
+  bairro: string
+  cidade: string
+  estado: string
+  cep: string
+}
+
 export function DatabaseProvider({ children }: DatabaseProviderProps) {
   const [aulas, setAulas] = useState<Aula[]>([]);
   const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [cadastro, setCadastro] = useState<Cadastro>();
 
   async function getAulas(turma: string) {
     const aulasRef = collection(db, 'aulas');
@@ -135,6 +169,38 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
     }
   }
 
+  async function getCadastro(userId: string) {
+    const cadastrosRef = collection(db, 'cadastros')
+    const q = query(cadastrosRef, where('alunoId', '==', userId))
+    const querySnapshot = await getDocs(q)
+
+    if (!querySnapshot.empty) {
+      const cadastroData = querySnapshot.docs[0].data() as Cadastro
+      setCadastro(cadastroData)
+      return cadastroData
+    }
+  }
+
+  const updateCadastro = async (userId: string, telefone: string, endereco: Endereco) => {
+    try {
+      const cadastroRef = collection(db, 'cadastros')
+      const q = query(cadastroRef, where('alunoId', '==', userId))
+      const querySnapshot = await getDocs(q)
+
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref
+        await updateDoc(docRef, {
+          telefone,
+          endereco
+        })
+      }
+      
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+
   async function createAula(turma: string, numero: number, titulo: string, dataAbertura: string, dataLimite: string, videoAula: string, material: string) {
     const aulasRef = collection(db, 'aulas')
     await addDoc(aulasRef, {
@@ -181,6 +247,8 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
       await addDoc(cadastrosRef, {
         alunoId: userId,
         email: auth.currentUser?.email,
+        telefone: '',
+        endereco: '',
         turmaId: turmaAberta.id,
         envios: []
       });
@@ -256,7 +324,6 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
       const querySnapshot = await getDocs(q)
 
       if (querySnapshot.empty) {
-        // Primeira vez do usuário, registrar na turma aberta
         await registerUserInOpenClass(userId)
       }
     } catch (error) {
@@ -338,10 +405,13 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
   const value = {
     turmas,
     aulas,
+    cadastro,
     getAulas,
     getTurmas,
     createTurma,
     updateTurmaStatus,
+    getCadastro,
+    updateCadastro,
     createAula,
     updateQuestoes,
     registerUserInOpenClass,

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useDatabase } from '../../contexts/DatabaseContext'
@@ -6,13 +6,25 @@ import { useDatabase } from '../../contexts/DatabaseContext'
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
-  const { isAdmin } = useAuth()
+  const { isAdmin, user } = useAuth()
+  const navigate = useNavigate()
 
   if (!isAdmin) {
-    const { getAulas } = useDatabase()
+    const { getAulas, getCadastro } = useDatabase()
+
+    async function handleGetCadastro() {
+      if (user) {
+        await getCadastro(user.uid).then((cadastro) => {
+          getAulas('2025-A')
+          if (cadastro?.endereco === '' || cadastro?.telefone === '') {
+            navigate('/dados')
+          }
+        })
+      }
+    }
+
     useEffect(() => {
-      console.log('test')
-      getAulas('2025-B')
+      handleGetCadastro()
     }, [])
   }
 

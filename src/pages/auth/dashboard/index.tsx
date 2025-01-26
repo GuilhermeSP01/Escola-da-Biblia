@@ -15,6 +15,19 @@ export default function Dashboard() {
     return format(date, "dd/MM/yyyy", { locale: ptBR })
   }
 
+  if (aulas.length === 0) {
+    return (
+      <div className="space-y-8">
+        <section className="space-y-4">
+          <h1 className="text-2xl font-semibold">Aulas</h1>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="text-gray-600">Ainda não há aulas disponíveis.</p>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-8">    
       <section className="space-y-4">

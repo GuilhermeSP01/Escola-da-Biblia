@@ -12,6 +12,7 @@ import Users from '../pages/admin/users'
 import TurmaDetails from '../pages/admin/turmas/[id]'
 import AulaQuestoes from '../pages/admin/turmas/aula/[id]'
 import UserDetails from '../pages/admin/users/[id]'
+import Dados from '../pages/auth/dados'
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
           {
             path: '/dashboard',
             element: <Dashboard />,
+          },
+          {
+            path: '/dados',
+            element: <Dados />,
           },
           {
             path: '/form/:id',
